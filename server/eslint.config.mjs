@@ -18,5 +18,17 @@ export default [
       'no-underscore-dangle': 'off',
       'linebreak-style': 'off',
     },
+    
+  },
+
+ 
+  {
+    files: ['**/*.test.js', '**/tests/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest, 
+      },
+    },
   },
 ]
