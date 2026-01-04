@@ -1,9 +1,12 @@
-const router = require('express').Router
-const login = require('../controllers/login')
-const signup = require('../controllers/signup')
+const router = require('express').Router()
+const {tokenExtractor,userExtractor} = require('../middleware/auth')
+const authControllers = require('../controllers/authControllers')
 
+// These are the public routes 
+router.post('/signup', authControllers.signup)
+router.post('/login', authControllers.login)
 
-router.post('/signup', signup.signup)
-router.post('/login', login.login)
+// This is a Private route meant for rehydrating state
+router.get('/me', tokenExtractor,userExtractor,authControllers.me)
 
 module.exports = router

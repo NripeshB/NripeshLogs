@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-
+const config = require('../utils/config')
 const tokenExtractor = (req, res, next) => {
     // gets the token 
     // Reads the "Authorization" header from the request
@@ -22,7 +22,7 @@ const userExtractor = (req, res, next) => {
       return res.status(401).json({ error: 'token missing' })
     }
     // verifies the token
-    const decodedToken = jwt.verify(req.token, process.env.JWT_SECRET)
+    const decodedToken = jwt.verify(req.token, config.SECRET)
        // as the final catch statement already catches any error the below
        
 //     // can be commented 
