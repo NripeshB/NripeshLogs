@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const blogsControllers = require('../controllers/blogControllers')
 const {tokenExtractor,userExtractor} = require('../middleware/auth')
-const {blogOwnerOrAdmin} = require('../middleware/ownership')
+const {blogOwnerOrAdmin} = require('../middleware/blogOwnership')
 
 // route for getting all the blogs
 router.get('/', blogsControllers.getAllBlogs)
