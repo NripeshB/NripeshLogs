@@ -1,4 +1,6 @@
 const authRoutes = require('./routes/authroutes.js')
+const blogRoutes = require('./routes/blogroutes.js')
+const articleRoutes = require('./routes/articleroutes.js')
 const express = require('express')
 const mongoose = require('mongoose')
 const config = require('./utils/config.js')
@@ -20,6 +22,9 @@ mongoose
     })
 
 app.use('/api/auth', authRoutes)
+app.use('/api/blogs',blogRoutes )
+app.use('/api/articles',articleRoutes )
+
 
 app.get('/api/health', (req,res)=>{
     const dbState = mongoose.connection.readyState

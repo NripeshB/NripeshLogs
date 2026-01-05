@@ -36,7 +36,8 @@ const userExtractor = (req, res, next) => {
     req.user = decodedToken
     // takes to the next step as its a middleware
     next()
-  } catch {
+  } catch (err) {
+    console.error('userExtractor error:', err.message)
     res.status(401).json({ error: 'token invalid or missing' })
   }
 }
