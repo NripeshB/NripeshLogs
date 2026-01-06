@@ -14,6 +14,31 @@ router.post(
   articlesController.createArticle
 )
 
+// this posts the comment on a given article (having id)
+router.post(
+  '/:id/comments',
+  tokenExtractor,
+  userExtractor,
+  articlesController.createComment
+)
+
+// it likes a given article (having id)
+router.post(
+  '/:id/like',
+  tokenExtractor,
+  userExtractor,
+  articlesController.toggleLike
+)
+
+// it dislikes a given article (having id)
+router.post(
+  '/:id/dislike',
+  tokenExtractor,
+  userExtractor,
+  articlesController.toggleDislike
+)
+
+
 
 // This allows only the signed in owner of the article (author) to update a specific article
 router.put(

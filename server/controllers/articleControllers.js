@@ -1,5 +1,7 @@
 const Article = require('../models/article')
 const Blog = require('../models/blog')
+const Comment = require('../models/comments')
+const Reaction = require('../models/reaction')
 
 // this functions helps in getting any article by its slug to anyone 
 const getArticleBySlug = async (req, res) => {
@@ -78,4 +80,139 @@ const deleteArticle = async (req, res) => {
   res.status(204).end()
 }
 
-module.exports = {getArticleBySlug, createArticle, updateArticle, deleteArticle}
+const createComment = async (req, res) => {
+  const { content } = req.body
+
+  if (!content || content.trim().length === 0) {
+    return res.status(400).json({ error: 'comment content required' })
+  }
+
+  const article = await Article.findById(req.params.id)
+  if (!article) {
+    return res.status(400).json({ error: 'invalid article' })
+  }
+
+  if (!article.published) {
+    return res.status(403).json({ error: 'cannot comment on draft article' })
+  }
+
+  const comment = new Comment({
+    article: article._id,
+    user: req.user.id,
+    content,
+  })
+
+  const saved = await comment.save()
+  res.status(201).json(saved)
+}
+
+
+const toggleLike = async (req, res) => {
+  const article = await Article.findById(req.params.id)
+  if (!article) {
+    return res.status(400).json({ error: 'invalid article' })
+  }
+
+  if (!article.published) {
+    return res.status(403).json({ error: 'cannot like draft article' })
+  }
+
+  const existingReaction = await Reaction.findOne({
+    user: req.user.id,
+    article: article._id,
+  })
+
+  // CASE 1: No reaction → add like
+  if (!existingReaction) {
+    await Reaction.create({
+      user: req.user.id,
+      article: article._id,
+      type: 'like',
+    })
+
+    await Article.findByIdAndUpdate(article._id, {
+      $inc: { likesCount: 1 },
+    })
+
+    return res.json({ status: 'liked' })
+  }
+
+  // CASE 2: Already liked → unlike
+  if (existingReaction.type === 'like') {
+    await existingReaction.deleteOne()
+
+    await Article.findByIdAndUpdate(article._id, {
+      $inc: { likesCount: -1 },
+    })
+
+    return res.json({ status: 'unliked' })
+  }
+
+  // CASE 3: Disliked → switch to like
+  if (existingReaction.type === 'dislike') {
+    existingReaction.type = 'like'
+    await existingReaction.save()
+
+    await Article.findByIdAndUpdate(article._id, {
+      $inc: { likesCount: 1, dislikesCount: -1 },
+    })
+
+    return res.json({ status: 'switched_to_like' })
+  }
+}
+
+const toggleDislike = async (req, res) => {
+  const article = await Article.findById(req.params.id)
+  if (!article) {
+    return res.status(400).json({ error: 'invalid article' })
+  }
+
+  if (!article.published) {
+    return res.status(403).json({ error: 'cannot dislike draft article' })
+  }
+
+  const existingReaction = await Reaction.findOne({
+    user: req.user.id,
+    article: article._id,
+  })
+
+  // CASE 1: No reaction → add dislike
+  if (!existingReaction) {
+    await Reaction.create({
+      user: req.user.id,
+      article: article._id,
+      type: 'dislike',
+    })
+
+    await Article.findByIdAndUpdate(article._id, {
+      $inc: { dislikesCount: 1 },
+    })
+
+    return res.json({ status: 'disliked' })
+  }
+
+  // CASE 2: Already disliked → remove dislike
+  if (existingReaction.type === 'dislike') {
+    await existingReaction.deleteOne()
+
+    await Article.findByIdAndUpdate(article._id, {
+      $inc: { dislikesCount: -1 },
+    })
+
+    return res.json({ status: 'undisliked' })
+  }
+
+  // CASE 3: Liked → switch to dislike
+  if (existingReaction.type === 'like') {
+    existingReaction.type = 'dislike'
+    await existingReaction.save()
+
+    await Article.findByIdAndUpdate(article._id, {
+      $inc: { dislikesCount: 1, likesCount: -1 },
+    })
+
+    return res.json({ status: 'switched_to_dislike' })
+  }
+}
+
+module.exports = {getArticleBySlug, createArticle, updateArticle, deleteArticle, createComment, toggleLike, toggleDislike}
