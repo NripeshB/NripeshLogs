@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const commentControllers = require('../controllers/commentControllers')
+const commentControllers = require('../controllers/commentsControllers')
 const { tokenExtractor, userExtractor } = require('../middleware/auth')
 const commentOwnerOrAdmin = require('../middleware/commentOwnership')
 

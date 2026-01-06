@@ -1,6 +1,5 @@
 const User = require('../models/user')
-const Like = require('../models/like')
-const Dislike = require('../models/dislike')
+const Reaction = require('../models/reaction')
 const Comment = require('../models/comments')
 
 
@@ -14,27 +13,31 @@ const getAllUsers = async (req, res) => {
 
 
 const getUserProfile = async (req, res) => {
-
   // finds the user that is trying to be accessed 
   const user = await User.findOne({ username: req.params.username })
     .select('username role bio createdAt')
-
   // if the user doesn't exist , returns not found the user
   if (!user) {
     return res.status(404).json({ error: 'user not found' })
   }
 
-  // gets all the Liked articles , their slug and title from the Like doc
+  // gets all the Disliked articles , their slug and title from the reaction 
+  // that are dislikes in the Reaction doc
   // of the user we searched for
-  const likes = await Like.find({ user: user._id })
-    .populate('article', 'title slug')
+  const likes = await Reaction.find({
+    user: user._id,
+    type: 'like',
+  }).populate('article', 'title slug')
 
-  // gets all the Disliked articles , their slug and title from the Dislike doc
+  // gets all the Disliked articles , their slug and title from the reaction 
+  // that are dislikes in the Reaction doc
   // of the user we searched for
-  const dislikes = await Dislike.find({ user: user._id })
-    .populate('article', 'title slug')
+  const dislikes = await Reaction.find({
+    user: user._id,
+    type: 'dislike',
+  }).populate('article', 'title slug')
 
-  // gets all the commented articles , their slug and title from the Comments doc
+  // gets all the commented articles , their slug and title from the comment doc
   // of the user we searched for
   const comments = await Comment.find({ user: user._id })
     .populate('article', 'title slug')
@@ -44,8 +47,8 @@ const getUserProfile = async (req, res) => {
   res.json({
     user,
     interactions: {
-      likedArticles: likes.map(l => l.article),
-      dislikedArticles: dislikes.map(d => d.article),
+      likedArticles: likes.map(r => r.article),
+      dislikedArticles: dislikes.map(r => r.article),
       comments: comments.map(c => ({
         article: c.article,
         content: c.content,
@@ -54,6 +57,7 @@ const getUserProfile = async (req, res) => {
     },
   })
 }
+
 
 // updating the user's role
 const updateUserRole = async (req, res) => {
