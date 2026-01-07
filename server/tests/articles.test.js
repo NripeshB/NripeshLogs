@@ -28,8 +28,7 @@ describe('Article tests ', ()=>{
             role: 'user',
         })
 
-        console.log(user)// this is here just to hush the eslint
-
+        if(user)
         // creates a sample blog
         blog = await helper.createBlog({
             title: 'Test Blog',

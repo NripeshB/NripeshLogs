@@ -81,94 +81,105 @@ const deleteArticle = async (req, res) => {
 }
 
 const createComment = async (req, res) => {
-  const { content } = req.body
 
+  // destructes the content for the request body
+  const { content } = req.body
+  // if the conent is missing or is just whitespaces then return suitable error 
   if (!content || content.trim().length === 0) {
     return res.status(400).json({ error: 'comment content required' })
   }
 
+  // find the article by requested id in the parameters 
   const article = await Article.findById(req.params.id)
+  // if article doesn't exist then send the apt error (bad request)
   if (!article) {
     return res.status(400).json({ error: 'invalid article' })
   }
 
+  // if article isn't published, the person is forbidden from commenting 
   if (!article.published) {
     return res.status(403).json({ error: 'cannot comment on draft article' })
   }
 
+  // create a comment object
   const comment = new Comment({
     article: article._id,
     user: req.user.id,
     content,
   })
 
+  // save it in the database and send created status
   const saved = await comment.save()
   res.status(201).json(saved)
 }
 
 
+
 const toggleLike = async (req, res) => {
+  // get the article sent in the paramters 
   const article = await Article.findById(req.params.id)
-  if (!article) {
-    return res.status(400).json({ error: 'invalid article' })
+
+  // if article is not published or the article doesn't exist 
+  if (!article || !article.published) {
+    return res.status(400).json({ error: 'article cannot be liked' })
   }
 
-  if (!article.published) {
-    return res.status(403).json({ error: 'cannot like draft article' })
-  }
-
+  // find the existing reaction of the specific user on that specific article 
   const existingReaction = await Reaction.findOne({
     user: req.user.id,
     article: article._id,
   })
 
-  // CASE 1: No reaction → add like
+  // if no reactions exist, just like the article 
   if (!existingReaction) {
     await Reaction.create({
       user: req.user.id,
       article: article._id,
       type: 'like',
     })
-
+    // and increment the likecount on the article 
     await Article.findByIdAndUpdate(article._id, {
+      // this increments the likesCount on the article by 1
       $inc: { likesCount: 1 },
     })
-
-    return res.json({ status: 'liked' })
-  }
-
-  // CASE 2: Already liked → unlike
-  if (existingReaction.type === 'like') {
+  } 
+  
+  // if a like already exists
+  else if (existingReaction.type === 'like') {
+    // delete the like or unlike it 
     await existingReaction.deleteOne()
 
+    // and decrement the existing Likecount by incrementing it by -1
     await Article.findByIdAndUpdate(article._id, {
       $inc: { likesCount: -1 },
     })
-
-    return res.json({ status: 'unliked' })
-  }
-
-  // CASE 3: Disliked → switch to like
-  if (existingReaction.type === 'dislike') {
+  } 
+  else {
+    // else the reaction type is dislike so turn it to like 
     existingReaction.type = 'like'
+    // save the reaction
     await existingReaction.save()
-
+    // and increment like count by one and decrement the dislike count by one 
     await Article.findByIdAndUpdate(article._id, {
       $inc: { likesCount: 1, dislikesCount: -1 },
     })
-
-    return res.json({ status: 'switched_to_like' })
   }
+
+  // now get the updated article 
+  const updated = await Article.findById(article._id)
+
+  // and sent the updated like and dislike count in reponse
+  res.json({
+    likesCount: updated.likesCount,
+    dislikesCount: updated.dislikesCount,
+  })
 }
 
+// similar steps follow in the dislike flow as in the like flow
 const toggleDislike = async (req, res) => {
   const article = await Article.findById(req.params.id)
-  if (!article) {
-    return res.status(400).json({ error: 'invalid article' })
-  }
-
-  if (!article.published) {
-    return res.status(403).json({ error: 'cannot dislike draft article' })
+  if (!article || !article.published) {
+    return res.status(404).json({ error: 'article not found' })
   }
 
   const existingReaction = await Reaction.findOne({
@@ -176,7 +187,6 @@ const toggleDislike = async (req, res) => {
     article: article._id,
   })
 
-  // CASE 1: No reaction → add dislike
   if (!existingReaction) {
     await Reaction.create({
       user: req.user.id,
@@ -187,32 +197,30 @@ const toggleDislike = async (req, res) => {
     await Article.findByIdAndUpdate(article._id, {
       $inc: { dislikesCount: 1 },
     })
-
-    return res.json({ status: 'disliked' })
-  }
-
-  // CASE 2: Already disliked → remove dislike
-  if (existingReaction.type === 'dislike') {
+  } 
+  else if (existingReaction.type === 'dislike') {
     await existingReaction.deleteOne()
 
     await Article.findByIdAndUpdate(article._id, {
       $inc: { dislikesCount: -1 },
     })
-
-    return res.json({ status: 'undisliked' })
-  }
-
-  // CASE 3: Liked → switch to dislike
-  if (existingReaction.type === 'like') {
+  } 
+  else {
     existingReaction.type = 'dislike'
     await existingReaction.save()
 
     await Article.findByIdAndUpdate(article._id, {
       $inc: { dislikesCount: 1, likesCount: -1 },
     })
-
-    return res.json({ status: 'switched_to_dislike' })
   }
+
+  const updated = await Article.findById(article._id)
+
+  res.json({
+    likesCount: updated.likesCount,
+    dislikesCount: updated.dislikesCount,
+  })
 }
+
 
 module.exports = {getArticleBySlug, createArticle, updateArticle, deleteArticle, createComment, toggleLike, toggleDislike}
