@@ -1,12 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { signupUser } from '../features/auth/authSlice'
+import { signupUser, clearAuthError } from '../features/auth/authSlice'
 import { Button, TextField, Stack, Typography, Alert } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
   const dispatch = useDispatch()
-  const { error } = useSelector((state) => state.auth)
+  const navigate = useNavigate()
+
+  const { error, status, token } = useSelector((state) => state.auth)
   const [formError, setFormError] = useState(null)
+
+  useEffect(() => {
+    dispatch(clearAuthError())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (token) {
+      navigate('/dashboard')
+    }
+  }, [token, navigate])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -39,8 +52,12 @@ const Signup = () => {
         <TextField name="email" label="Email" required />
         <TextField name="password" label="Password" type="password" required />
 
-        <Button type="submit" variant="contained">
-          Create Account
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={status === 'loading'}
+        >
+          {status === 'loading' ? 'Creating account…' : 'Create Account'}
         </Button>
       </Stack>
     </form>
