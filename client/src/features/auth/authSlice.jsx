@@ -79,6 +79,14 @@ const authSlice = createSlice({
         state.token = null
         localStorage.removeItem('token')
       })
+
+      .addCase(loginUser.rejected, (state, action) => {
+        state.error = action.error.message || 'Login failed'
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.error = action.error.message || 'Signup failed'
+      })
+
   },
 })
 

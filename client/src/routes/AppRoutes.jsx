@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import PublicLayout from '../layouts/PublicLayout'
 import Login from '../pages/Login'
+import Signup from '../pages/Signup'
 import Blogs from '../pages/Blogs'
 import RequireAuth from '../features/auth/requireAuth'
 import RequireAdmin from '../features/auth/requireAdmin'
@@ -22,6 +23,15 @@ const AppRoutes = () => {
         element={
           <PublicLayout>
             <Login />
+          </PublicLayout>
+        }
+      />
+      
+      <Route
+        path="/signup"
+        element={
+          <PublicLayout>
+            <Signup />
           </PublicLayout>
         }
       />

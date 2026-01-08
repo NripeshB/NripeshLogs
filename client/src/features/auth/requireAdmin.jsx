@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
-import { isAdmin } from '../../utils/permissions'
+import { isAdmin } from '../../utils/permission'
 
 const RequireAdmin = () => {
   const { user, hydrated } = useSelector((state) => state.auth)
