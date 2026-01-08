@@ -3,13 +3,18 @@ const blogRoutes = require('./routes/blogroutes.js')
 const articleRoutes = require('./routes/articleroutes.js')
 const commentRoutes = require('./routes/commentroutes.js')
 const usersRoutes = require('./routes/usersroutes.js')
+const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
 const config = require('./utils/config.js')
 
 // using express as app
 const app = express()
-
+// allowing cross origin access (giving access to the client )
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}))
 app.use(express.json())
 // connecting to the 
 mongoose
@@ -23,6 +28,7 @@ mongoose
         
     })
 // All the routes 
+
 app.use('/api/auth', authRoutes)
 app.use('/api/blogs',blogRoutes )
 app.use('/api/articles',articleRoutes )
