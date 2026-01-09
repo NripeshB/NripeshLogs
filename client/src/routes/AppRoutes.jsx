@@ -4,13 +4,13 @@ import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 import Blogs from '../pages/Blogs'
 import BlogDetail from '../pages/Blogdetails'
+import ArticleDetail from '../pages/ArticlesDetails'
 import RequireAuth from '../features/auth/requireAuth'
 import RequireAdmin from '../features/auth/requireAdmin'
 
 const AppRoutes = () => {
   return (
     <Routes>
-      
     <Route
       path="/blogs"
       element={
@@ -19,7 +19,6 @@ const AppRoutes = () => {
         </PublicLayout>
       }
     />
-
     <Route
       path="/blogs/:blogSlug"
       element={
@@ -28,8 +27,7 @@ const AppRoutes = () => {
         </PublicLayout>
       }
     />
-
-      <Route
+    <Route
         path="/login"
         element={
           <PublicLayout>
@@ -37,6 +35,15 @@ const AppRoutes = () => {
           </PublicLayout>
         }
       />
+
+<Route
+  path="/articles/:articleSlug"
+  element={
+    <PublicLayout>
+      <ArticleDetail />
+    </PublicLayout>
+  }
+/>
       
       <Route
         path="/signup"
