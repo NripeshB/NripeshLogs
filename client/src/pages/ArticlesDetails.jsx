@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getArticleBySlug } from '../api/articles.api'
+import { getArticleBySlug, likeArticle, dislikeArticle, addComment, } from '../api/articles.api'
+import { useSelector } from 'react-redux'
 import {
   Stack,
   Typography,
@@ -8,6 +9,8 @@ import {
   Divider,
   Alert,
   Skeleton,
+  Button,
+  TextField
 } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -17,6 +20,42 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [commentText, setCommentText] = useState('')
+  const [actionLoading, setActionLoading] = useState(false)
+  const user = useSelector((state) => state.auth.user)
+
+  const refreshArticle = async () => {
+    const updated = await getArticleBySlug(articleSlug)
+    setArticle(updated)
+  }
+
+  const handleLike = async () => {
+    if (!user) return
+    setActionLoading(true)
+    await likeArticle(article.id)
+    await refreshArticle()
+    setActionLoading(false)
+  }
+
+  const handleDislike = async () => {
+    if (!user) return
+    setActionLoading(true)
+    await dislikeArticle(article.id)
+    await refreshArticle()
+    setActionLoading(false)
+  }
+
+  const handleAddComment = async () => {
+    if (!commentText.trim()) return
+    setActionLoading(true)
+    await addComment(article.id, commentText)
+    setCommentText('')
+    await refreshArticle()
+    setActionLoading(false)
+  }
+
+
+
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -76,59 +115,129 @@ const ArticleDetail = () => {
 
       {/* Content */}
       <ReactMarkdown
-  remarkPlugins={[remarkGfm]}
-  components={{
-    h1: ({ children }) => (
-      <Typography variant="h4" gutterBottom component="h1">
-        {children}
-      </Typography>
-    ),
-    h2: ({ children }) => (
-      <Typography variant="h5" gutterBottom component="h2">
-        {children}
-      </Typography>
-    ),
-    h3: ({ children }) => (
-      <Typography variant="h6" gutterBottom component="h3">
-        {children}
-      </Typography>
-    ),
+          remarkPlugins={[remarkGfm]}
+            components={{
+              h1: ({ children }) => (
+                <Typography variant="h4" gutterBottom component="h1">
+                  {children}
+                </Typography>
+              ),
+              h2: ({ children }) => (
+                <Typography variant="h5" gutterBottom component="h2">
+                  {children}
+                </Typography>
+              ),
+              h3: ({ children }) => (
+                <Typography variant="h6" gutterBottom component="h3">
+                  {children}
+                </Typography>
+              ),
 
-    p: ({ children }) => (
-      <Typography
-        variant="body1"
-        paragraph
-        component="p"
-      >
-        {children}
-      </Typography>
-    ),
+              p: ({ children }) => (
+                <Typography
+                  variant="body1"
+                  paragraph
+                  component="p"
+                >
+                  {children}
+                </Typography>
+              ),
 
-    ul: ({ children }) => (
-      <Typography component="ul" sx={{ pl: 3, mb: 2 }}>
-        {children}
-      </Typography>
-    ),
+              ul: ({ children }) => (
+                <Typography component="ul" sx={{ pl: 3, mb: 2 }}>
+                  {children}
+                </Typography>
+              ),
 
-    ol: ({ children }) => (
-      <Typography component="ol" sx={{ pl: 3, mb: 2 }}>
-        {children}
-      </Typography>
-    ),
+              ol: ({ children }) => (
+                <Typography component="ol" sx={{ pl: 3, mb: 2 }}>
+                  {children}
+                </Typography>
+              ),
 
-    li: ({ children }) => (
-      <li>
-        <Typography component="span" variant="body1">
-          {children}
-        </Typography>
-      </li>
-    ),
-  }}
->
-  {article.content}
-</ReactMarkdown>
+              li: ({ children }) => (
+                <li>
+                  <Typography component="span" variant="body1">
+                    {children}
+                  </Typography>
+                </li>
+              ),
+            }}  
+        >
+          {article.content}
+        </ReactMarkdown>
 
-    </Stack>
+      {/* Engagement */}
+        <Divider />
+
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography>👍 {article.likesCount}</Typography>
+          <Typography>👎 {article.dislikesCount}</Typography>
+
+          {user ? (
+            <>
+              <Button
+                size="small"
+                onClick={handleLike}
+                disabled={actionLoading}
+              >
+                Like
+              </Button>
+              <Button
+                size="small"
+                onClick={handleDislike}
+                disabled={actionLoading}
+              >
+                Dislike
+              </Button>
+            </>
+          ) : (
+            <Typography variant="caption" color="text.secondary">
+              Login to like or comment
+            </Typography>
+          )}
+        </Stack>
+
+        <Divider />
+
+        <Typography variant="h6">Comments</Typography>
+
+      {(article.comments?.length ?? 0) === 0 ? (
+        <Typography color="text.secondary">
+        No comments yet.
+        </Typography>) 
+        :
+        (
+       (article.comments ?? []).map((comment) => (
+          <Stack key={comment.id} spacing={0.5}>
+            <Typography variant="body2">
+              <strong>{comment.user.username}</strong>
+            </Typography> 
+            <Typography variant="body1">{comment.content}</Typography>
+          </Stack>
+        ))
+      )}
+    {user && (
+      <Stack spacing={1}>
+        <TextField
+          multiline
+          minRows={2}
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          placeholder="Write a comment..."
+        />
+        <Button
+          variant="contained"
+          onClick={handleAddComment}
+          disabled={actionLoading}
+        >
+          Post Comment
+        </Button>
+      </Stack>
+    )}
+
+
+  </Stack>
   )
 }
 

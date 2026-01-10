@@ -14,15 +14,23 @@ const getArticleBySlug = async (req, res) => {
     .populate('author', 'username role')
     // this populates the blog with the title and the slug of the blog
     .populate('blog', 'title slug')
-
-    // throws 404 if not found the article 
+  // throws 404 if not found the article 
   if (!article) {
     return res.status(404).json({ error: 'article not found' })
   }
 
+  // finds all the comments related to the article date wise 
+  const comments = await Comment.find({ article: article._id })
+    .populate('user', 'username')
+    .sort({ createdAt: 1 })
+
   //sends the constrcuted article in the response
-  res.json(article)
+  res.json({
+    ...article.toJSON(),
+    comments,
+  })
 }
+
 
 // this function creates an article 
 const createArticle = async (req, res) => {
