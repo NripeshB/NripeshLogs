@@ -2,11 +2,11 @@ import { AppBar, Toolbar, Button, Stack } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../features/auth/authSlice'
-
+import { isAuthor } from '../utils/permission'
 const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { token } = useSelector((state) => state.auth)
+  const { token, user } = useSelector((state) => state.auth)
 
   const handleLogout = () => {
     dispatch(logout())
@@ -36,9 +36,12 @@ const Navbar = () => {
           </Stack>
         ) : (
           <Stack direction="row" spacing={1}>
-            <Button color="inherit" component={Link} to="/dashboard">
-              Dashboard
-            </Button>
+            {token && isAuthor(user) && (
+              <Button color="inherit" component={Link} to="/dashboard">
+                Dashboard
+              </Button>
+            )}
+
             <Button color="inherit" onClick={handleLogout}>
               Logout
             </Button>

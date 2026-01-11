@@ -7,10 +7,21 @@ import BlogDetail from '../pages/Blogdetails'
 import ArticleDetail from '../pages/ArticlesDetails'
 import RequireAuth from '../features/auth/requireAuth'
 import RequireAdmin from '../features/auth/requireAdmin'
-
+import RequireAuthor from '../features/auth/requireAuthor'
+import DashboardHome from '../pages/DashboardHome'
+import DashboardBlogs from '../pages/DashboardBlogs'
+import DashboardLayout from '../layouts/DashboardLayout'
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route
+        path="/"
+        element={
+          <PublicLayout>
+            {<h1>Profile Page</h1>}
+          </PublicLayout>
+        }
+      />
     <Route
       path="/blogs"
       element={
@@ -55,6 +66,12 @@ const AppRoutes = () => {
       />
 
       <Route element={<RequireAuth />}>
+      <Route element={<RequireAuthor />}>
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardHome />} />
+          <Route path="blogs" element={<DashboardBlogs />} />
+        </Route>
+      </Route>
         <Route path="/dashboard" element={<h1>Dashboard</h1>} />
       </Route>
 
