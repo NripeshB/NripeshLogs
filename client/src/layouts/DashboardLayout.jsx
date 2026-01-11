@@ -5,12 +5,13 @@ import {
   Button,
   Drawer,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   AppBar,
   Toolbar,
   Typography,
 } from '@mui/material'
+
 import { isAdmin } from '../utils/permission'
 
 const drawerWidth = 220
@@ -50,22 +51,27 @@ const DashboardLayout = () => {
       >
         <Toolbar />
         <List>
-          <ListItem button component={Link} to="/dashboard">
+          <ListItemButton  component={Link} to="/dashboard">
             <ListItemText primary="Overview" />
-          </ListItem>
+          </ListItemButton>
 
-          <ListItem button component={Link} to="/dashboard/blogs">
+          <ListItemButton  component={Link} to="/dashboard/blogs">
             <ListItemText primary="My Blogs" />
-          </ListItem>
+          </ListItemButton>
 
-          <ListItem button component={Link} to="/dashboard/articles/new">
+          <ListItemButton component={Link} to="/dashboard/blogs/new">
+            <ListItemText primary="New Blog" />
+          </ListItemButton>
+
+
+          <ListItemButton  component={Link} to="/dashboard/articles/new">
             <ListItemText primary="New Article" />
-          </ListItem>
+          </ListItemButton>
 
           {isAdmin(user) && (
-            <ListItem button component={Link} to="/admin">
+            <ListItemButton component={Link} to="/admin">
               <ListItemText primary="Admin Panel" />
-            </ListItem>
+            </ListItemButton>
           )}
         </List>
       </Drawer>

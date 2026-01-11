@@ -12,3 +12,8 @@ export const getBlogsBySlug = async (slug) => {
     articles: res.data.articles,
   }
 }
+
+export const createBlog = async (payload) => {
+  const res = await api.post('/api/blogs', payload)
+  return res.data
+}

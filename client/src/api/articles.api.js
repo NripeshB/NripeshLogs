@@ -22,3 +22,8 @@ export const addComment = async (articleId, content) => {
   })
   return res.data
 }
+
+export const createArticle = async (payload) => {
+  const res = await api.post('/api/articles', payload)
+  return res.data
+}
