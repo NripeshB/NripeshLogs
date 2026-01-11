@@ -3,6 +3,21 @@ const Blog = require('../models/blog')
 const Comment = require('../models/comments')
 const Reaction = require('../models/reaction')
 
+
+// GET /api/articles
+// returns all articles created by the logged-in author (draft + published)
+const getMyArticles = async (req, res) => {
+  const articles = await Article.find({
+    author: req.user.id,
+  })
+    .populate('blog', 'title slug')
+    .sort({ createdAt: -1 })
+
+  res.json(articles)
+}
+
+
+
 // this functions helps in getting any article by its slug to anyone 
 const getArticleBySlug = async (req, res) => {
   // finds one article with the slug as mentioned in the slug value and is published
@@ -221,6 +236,7 @@ const toggleDislike = async (req, res) => {
       $inc: { dislikesCount: 1, likesCount: -1 },
     })
   }
+  
 
   const updated = await Article.findById(article._id)
 
@@ -231,4 +247,4 @@ const toggleDislike = async (req, res) => {
 }
 
 
-module.exports = {getArticleBySlug, createArticle, updateArticle, deleteArticle, createComment, toggleLike, toggleDislike}
+module.exports = {getMyArticles, getArticleBySlug, createArticle, updateArticle, deleteArticle, createComment, toggleLike, toggleDislike}

@@ -17,7 +17,9 @@ import DashboardHome from '../pages/DashboardHome'
 import DashboardBlogs from '../pages/DashboardBlogs'
 import DashboardNewBlog from '../pages/DashboardNewBlog'
 import DashboardNewArticle from '../pages/DashboardNewArticle'
-
+import DashboardEditBlog from '../pages/DashboardEditBlog'
+import DashboardEditArticle from '../pages/DashboardEditArticle'
+import DashboardBlogDetail from '../pages/DashboardBlogDetails'
 const AppRoutes = () => {
   return (
     <Routes>
@@ -84,8 +86,10 @@ const AppRoutes = () => {
 
             <Route path="blogs" element={<DashboardBlogs />} />
             <Route path="blogs/new" element={<DashboardNewBlog />} />
-
+            <Route path="blogs/:blogId" element={<DashboardBlogDetail />} />
             <Route path="articles/new" element={<DashboardNewArticle />} />
+            <Route path="blogs/:blogId/edit" element={<DashboardEditBlog />} />
+            <Route path="articles/:articleId/edit" element={<DashboardEditArticle />} />
           </Route>
         </Route>
 

@@ -39,6 +39,10 @@ router.post(
 )
 
 
+router.get('/',
+  tokenExtractor,
+  userExtractor,
+  articlesController.getMyArticles)
 
 // This allows only the signed in owner of the article (author) to update a specific article
 router.put(

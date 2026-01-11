@@ -14,6 +14,8 @@ import {
 } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import CommentItem from '../components/commentItem'
+
 
 const ArticleDetail = () => {
   const { articleSlug } = useParams()
@@ -209,13 +211,13 @@ const ArticleDetail = () => {
         :
         (
        (article.comments ?? []).map((comment) => (
-          <Stack key={comment.id} spacing={0.5}>
-            <Typography variant="body2">
-              <strong>{comment.user.username}</strong>
-            </Typography> 
-            <Typography variant="body1">{comment.content}</Typography>
-          </Stack>
-        ))
+        <CommentItem
+          key={comment.id}
+          comment={comment}
+          onUpdated={refreshArticle}
+        />
+      ))
+
       )}
     {user && (
       <Stack spacing={1}>
