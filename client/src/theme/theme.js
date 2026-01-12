@@ -4,10 +4,10 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#3a3a3aff',
+      main: 'rgb(170, 0, 200)',
     },
     secondary: {
-      main: '#682f71',
+      main: '#630072',
     },
     background: {
       default: '#0f1216',

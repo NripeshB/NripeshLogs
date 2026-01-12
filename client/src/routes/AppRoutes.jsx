@@ -20,6 +20,11 @@ import DashboardNewArticle from '../pages/DashboardNewArticle'
 import DashboardEditBlog from '../pages/DashboardEditBlog'
 import DashboardEditArticle from '../pages/DashboardEditArticle'
 import DashboardBlogDetail from '../pages/DashboardBlogDetails'
+import Home from '../pages/Home'
+import AuthorProfile from '../pages/AuthorProfile'
+import Authors from '../pages/Authors'
+import AdminUsers from '../pages/AdminUsers'
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -28,10 +33,29 @@ const AppRoutes = () => {
         path="/"
         element={
           <PublicLayout>
-            <h1>Profile Page</h1>
+            <Home />
           </PublicLayout>
         }
       />
+      <Route
+        path="/authors"
+        element={
+          <PublicLayout>
+            <Authors />
+          </PublicLayout>
+        }
+      />
+
+      <Route
+        path="/authors/:username"
+        element={
+          <PublicLayout>
+            <AuthorProfile />
+          </PublicLayout>
+        }
+      />
+
+
 
       <Route
         path="/blogs"
@@ -94,8 +118,11 @@ const AppRoutes = () => {
         </Route>
 
         <Route element={<RequireAdmin />}>
-          <Route path="/admin" element={<h1>Admin Panel</h1>} />
+          <Route path="/admin" element={<DashboardLayout />}>
+            <Route path="users" element={<AdminUsers />} />
+          </Route>
         </Route>
+
       </Route>
 
     </Routes>

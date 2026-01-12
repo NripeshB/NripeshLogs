@@ -9,6 +9,7 @@ router.get('/', usersController.getAllUsers)
 // get a specific user with a username
 router.get('/:username', usersController.getUserProfile)
 
+router.get('/:username/blogs', usersController.getAuthorBlogsWithArticles)
 // change the user's role (only accessable by admin )
 router.patch(
   '/:id/role',

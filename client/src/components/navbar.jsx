@@ -23,6 +23,10 @@ const Navbar = () => {
           <Button color="inherit" component={Link} to="/blogs">
             Blogs
           </Button>
+          <Button color="inherit" component={Link} to="/authors">
+            Authors
+          </Button>
+
         </Stack>
 
         {!token ? (

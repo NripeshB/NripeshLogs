@@ -69,7 +69,7 @@ const DashboardLayout = () => {
           </ListItemButton>
 
           {isAdmin(user) && (
-            <ListItemButton component={Link} to="/admin">
+            <ListItemButton component={Link} to="/admin/users">
               <ListItemText primary="Admin Panel" />
             </ListItemButton>
           )}
