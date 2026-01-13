@@ -139,131 +139,136 @@ const ArticleDetail = () => {
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-  h1: ({ children }) => (
-    <Typography variant="h4" gutterBottom sx={{ mt: 0 }}>
-      {children}
-    </Typography>
-  ),
-  h2: ({ children }) => (
-    <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
-      {children}
-    </Typography>
-  ),
-  h3: ({ children }) => (
-    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-      {children}
-    </Typography>
-  ),
-  h4: ({ children }) => (
-    <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-      {children}
-    </Typography>
-  ),
-  h5: ({ children }) => (
-    <Typography variant="subtitle2" fontWeight={600} gutterBottom>
-      {children}
-    </Typography>
-  ),
-  h6: ({ children }) => (
-    <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-      {children}
-    </Typography>
-  ),
-  
-  // ✅ FIX: Use div instead of Typography paragraph for paragraphs
-  p: ({ children }) => (
-    <div style={{ marginBottom: '1rem', lineHeight: 1.7 }}>
-      {children}
-    </div>
-  ),
-  
-  code({ inline, className, children }) {
-    if (inline) {
-      return (
-        <code 
-          className={className}
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.08)',
-            padding: '2px 6px',
-            borderRadius: '4px',
-            fontFamily: 'monospace',
-            fontSize: '0.875em',
-            color: '#d63384'
+            h1: ({ children }) => (
+              <Typography variant="h4" gutterBottom sx={{ mt: 0 }}>
+                {children}
+              </Typography>
+            ),
+            h2: ({ children }) => (
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
+                {children}
+              </Typography>
+            ),
+            h3: ({ children }) => (
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                {children}
+              </Typography>
+            ),
+            h4: ({ children }) => (
+              <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                {children}
+              </Typography>
+            ),
+            h5: ({ children }) => (
+              <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+                {children}
+              </Typography>
+            ),
+            h6: ({ children }) => (
+              <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                {children}
+              </Typography>
+            ),
+            
+            // ✅ FIX: Use div instead of Typography paragraph for paragraphs
+            p: ({ children }) => (
+              <div style={{ marginBottom: '1rem', lineHeight: 1.7 }}>
+                {children}
+              </div>
+            ),
+            
+            code({ inline, className, children }) {
+              if (inline) {
+                return (
+                  <code
+                    className={className}
+                    style={{
+                      backgroundColor: 'rgba(0,0,0,0.08)',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      fontFamily: 'monospace',
+                      fontSize: '0.875em',
+                      color: '#d63384',
+                    }}
+                  >
+                    {children}
+                  </code>
+                )
+              }
+
+              const language =
+                className?.replace('language-', '') || 'plaintext'
+
+              return (
+                <SyntaxHighlighter
+                  language={language}
+                  style={tomorrow}
+                  customStyle={{
+                    margin: '24px 0',
+                    borderRadius: '12px',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    overflowWrap: 'anywhere',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              )
+            },
+            
+            blockquote: ({ children }) => (
+              <Typography
+                component="blockquote"
+                sx={{
+                  borderLeft: '4px solid',
+                  borderColor: 'primary.main',
+                  pl: 3,
+                  pr: 3,
+                  py: 2,
+                  color: 'text.primary',
+                  fontStyle: 'italic',
+                  my: 3,
+                  bgcolor: 'grey.50',
+                  borderRadius: '4px'
+                }}
+              >
+                {children}
+              </Typography>
+            ),
+            
+            // ✅ Clean lists - NO Typography wrappers
+            ul: ({ children }) => (
+              <ul style={{ paddingLeft: '24px', margin: '16px 0' }}>
+                {children}
+              </ul>
+            ),
+            ol: ({ children }) => (
+              <ol style={{ paddingLeft: '24px', margin: '16px 0' }}>
+                {children}
+              </ol>
+            ),
+            li: ({ children }) => (
+              <li style={{ marginBottom: '12px', lineHeight: 1.6 }}>
+                {children}
+              </li>
+            ),
+            
+            a: ({ href, children }) => (
+              <a 
+                href={href} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{
+                  color: 'rgb(133, 0, 156)',
+                  textDecoration: 'none',
+                  fontWeight: 500,
+                }}
+              >
+                {children}
+              </a>
+            )
           }}
-        >
-          {children}
-        </code>
-      )
-    }
-    const language = className?.replace('language-', '') || 'plaintext'
-    return (
-      <SyntaxHighlighter
-        language={language}
-        style={tomorrow}
-        customStyle={{
-          margin: '24px 0',
-          borderRadius: '12px',
-          overflow: 'hidden',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}
-      >
-        {String(children).replace(/\n$/, '')}
-      </SyntaxHighlighter>
-    )
-  },
-  
-  blockquote: ({ children }) => (
-    <Typography
-      component="blockquote"
-      sx={{
-        borderLeft: '4px solid',
-        borderColor: 'primary.main',
-        pl: 3,
-        pr: 3,
-        py: 2,
-        color: 'text.primary',
-        fontStyle: 'italic',
-        my: 3,
-        bgcolor: 'grey.50',
-        borderRadius: '4px'
-      }}
-    >
-      {children}
-    </Typography>
-  ),
-  
-  // ✅ Clean lists - NO Typography wrappers
-  ul: ({ children }) => (
-    <ul style={{ paddingLeft: '24px', margin: '16px 0' }}>
-      {children}
-    </ul>
-  ),
-  ol: ({ children }) => (
-    <ol style={{ paddingLeft: '24px', margin: '16px 0' }}>
-      {children}
-    </ol>
-  ),
-  li: ({ children }) => (
-    <li style={{ marginBottom: '12px', lineHeight: 1.6 }}>
-      {children}
-    </li>
-  ),
-  
-  a: ({ href, children }) => (
-    <a 
-      href={href} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      style={{
-        color: 'rgb(133, 0, 156)',
-        textDecoration: 'none',
-        fontWeight: 500,
-      }}
-    >
-      {children}
-    </a>
-  )
-}}
         >
           {article.content}
         </ReactMarkdown>

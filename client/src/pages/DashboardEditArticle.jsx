@@ -16,6 +16,10 @@ const location = useLocation()
 const [article, setArticle] = useState(
   location.state?.article || null
 )
+const handleDelete = async()=>{
+  await deleteArticle(article.id)
+   navigate('/dashboard')
+}
 
 const handleTogglePublish = async () => {
   try {
@@ -84,7 +88,7 @@ useEffect(() => {
       </Button>
 
 
-      <Button color="error" onClick={() => deleteArticle(article.id)}>
+      <Button color="error" onClick={handleDelete}>
         Delete
       </Button>
     </Stack>

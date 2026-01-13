@@ -96,57 +96,86 @@ if (error) {
   return <Typography color="error">{error}</Typography>
 }
 
-  return (
-    <Stack spacing={2}>
-      <Typography variant="h4">{blog.title}</Typography>
+  return (<Stack spacing={3}>
+  {/* Blog Header */}
+  <Stack spacing={1}>
+    <Typography
+      variant="h4"
+      sx={{ fontSize: { xs: '1.75rem', md: '2.125rem' } }}
+    >
+      {blog.title}
+    </Typography>
+
+    {blog.description && (
       <Typography color="text.secondary">
         {blog.description}
       </Typography>
+    )}
+  </Stack>
 
-      <Stack direction="row" spacing={1}>
-        <Button
-          onClick={() =>
-            navigate(`/dashboard/blogs/${blogId}/edit`)
-          }
-        >
-          Edit Blog
-        </Button>
+  {/* Blog Actions */}
+  <Stack
+    direction={{ xs: 'column', sm: 'row' }}
+    spacing={1}
+  >
+    <Button
+      variant="outlined"
+      onClick={() =>
+        navigate(`/dashboard/blogs/${blogId}/edit`)
+      }
+    >
+      Edit Blog
+    </Button>
 
-        <Button
-          variant="contained"
-          onClick={() =>
-            navigate(
-              `/dashboard/articles/new`
-            )
-          }
-        >
-          New Article
-        </Button>
-      </Stack>
+    <Button
+      variant="contained"
+      onClick={() =>
+        navigate(`/dashboard/articles/new`)
+      }
+    >
+      New Article
+    </Button>
+  </Stack>
 
-      {articles.length === 0 ? (
-        <Typography color="text.secondary">
-          No articles in this blog yet.
-        </Typography>
-      ) : (
-        articles.map((article) => (
-          <Card key={article.id}>
-            <CardContent>
-              <Typography variant="h6">
-                {article.title}
-              </Typography>
+  {/* Articles */}
+  {articles.length === 0 ? (
+    <Typography color="text.secondary">
+      No articles in this blog yet.
+    </Typography>
+  ) : (
+    <Stack spacing={2}>
+      {articles.map((article) => (
+        <Card key={article.id} variant="outlined">
+          <CardContent>
+            <Stack spacing={1}>
+              {/* Title + Status */}
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                flexWrap="wrap"
+                gap={1}
+              >
+                <Typography variant="h6">
+                  {article.title}
+                </Typography>
 
-              <Chip
-                size="small"
-                label={
-                  article.published ? 'Published' : 'Draft'
-                }
-                color={
-                  article.published ? 'success' : 'default'
-                }
-              />
+                <Chip
+                  size="small"
+                  label={
+                    article.published ? 'Published' : 'Draft'
+                  }
+                  color={
+                    article.published ? 'success' : 'default'
+                  }
+                />
+              </Stack>
 
-              <Stack direction="row" spacing={1}>
+              {/* Article Actions */}
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={1}
+              >
                 <Button
                   size="small"
                   onClick={() =>
@@ -154,7 +183,6 @@ if (error) {
                       `/dashboard/articles/${article.id}/edit`,
                       { state: { article } }
                     )
-
                   }
                 >
                   Edit
@@ -165,24 +193,27 @@ if (error) {
                   variant="outlined"
                   onClick={() => handleTogglePublish(article)}
                 >
-                  {article.published ? 'Unpublish' : 'Publish'}
+                  {article.published
+                    ? 'Unpublish'
+                    : 'Publish'}
                 </Button>
-
 
                 <Button
-                    size="small"
-                    color="error"
-                    onClick={() => handleDelete(article.id)}
-                    >
-                    Delete
+                  size="small"
+                  color="error"
+                  onClick={() => handleDelete(article.id)}
+                >
+                  Delete
                 </Button>
-
               </Stack>
-            </CardContent>
-          </Card>
-        ))
-      )}
+            </Stack>
+          </CardContent>
+        </Card>
+      ))}
     </Stack>
+  )}
+</Stack>
+
   )
 }
 
