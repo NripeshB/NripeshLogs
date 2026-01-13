@@ -34,25 +34,72 @@ const Blogs = () => {
   if (error) return <Alert severity="error">{error}</Alert>
 
   return (
-    <Grid container spacing={3}>
-      {blogs.map((blog) => (
-        <Grid item xs={12} sm={6} md={4} key={blog.id}>
-          <Card>
-            <CardActionArea component={Link} to={`/blogs/${blog.slug}`}>
-              <CardContent>
-                <Typography variant="h6">{blog.title}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {blog.description}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  by {blog.author.username}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-      ))}
+<Grid container spacing={3}>
+  {blogs.map((blog) => (
+    <Grid item xs={12} sm={6} md={4} key={blog.id}>
+      <Card
+        sx={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <CardActionArea
+          component={Link}
+          to={`/blogs/${blog.slug}`}
+          sx={{ flexGrow: 1, alignItems: 'stretch' }}
+        >
+          <CardContent
+            sx={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {/* Title */}
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                mb: 1,
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {blog.title}
+            </Typography>
+
+            {/* Description */}
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                flexGrow: 1,
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {blog.description}
+            </Typography>
+
+            {/* Author */}
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ mt: 2 }}
+            >
+              by {blog.author.username}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
     </Grid>
+  ))}
+</Grid>
   )
 }
 

@@ -10,8 +10,18 @@ import {
 } from '@mui/material'
 
 const DashboardNewBlog = () => {
+  const slugify = (text) => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')   // remove special chars
+    .replace(/\s+/g, '-')           // spaces → hyphens
+    .replace(/-+/g, '-')            // collapse multiple hyphens
+}
+
   const navigate = useNavigate()
   const [title, setTitle] = useState('')
+  const [slug, setSlug] = useState('')
   const [description, setDescription] = useState('')
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -25,7 +35,7 @@ const DashboardNewBlog = () => {
 
     try {
       setLoading(true)
-      await createBlog({ title, description })
+      await createBlog({ title,slug, description })
       navigate('/dashboard/blogs')
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create blog')
@@ -44,7 +54,18 @@ const DashboardNewBlog = () => {
         <TextField
           label="Title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            const newTitle = e.target.value
+            setTitle(newTitle)
+            setSlug(slugify(newTitle))
+          }}
+          required
+        />
+        <TextField
+          label="Slug"
+          value={slug}
+          onChange={(e) => setSlug(slugify(e.target.value))}
+          helperText="Used in the URL"
           required
         />
 

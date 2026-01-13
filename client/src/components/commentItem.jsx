@@ -4,6 +4,9 @@ import {
   Stack,
   Typography,
   Button,
+  Paper,
+  Box,
+  Divider,
   TextField,
   Alert,
 } from '@mui/material'
@@ -48,63 +51,128 @@ const CommentItem = ({ comment, onUpdated }) => {
   }
 
   return (
-    <Stack spacing={1}>
-      <Typography variant="body2">
-        <strong>{comment.user.username}</strong>
-      </Typography>
+    <Paper 
+  elevation={1} 
+  sx={{ 
+    p: 2.5, 
+    mb: 2, 
+    bgcolor: '#151516',
+    borderRadius: 2,
+    maxWidth: 600 
+  }}
+>
+  <Stack spacing={1.5}>
+    {/* Author Header */}
+    <Stack direction="row" alignItems="center" spacing={1.5}>
+      <Paper 
+        sx={{ 
+          width: 40, 
+          height: 40, 
+          borderRadius: '50%',
+          bgcolor: 'primary.main',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Typography variant="caption" color="white" fontWeight={600}>
+          {comment.user.username[0].toUpperCase()}
+        </Typography>
+      </Paper>
+      
+      <Box sx={{ flex: 1 }}>
+        <Typography variant="subtitle2" fontWeight={700} noWrap>
+          {comment.user.username}
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          {new Date(comment.createdAt).toLocaleDateString()}
+        </Typography>
+      </Box>
+    </Stack>
 
-      {editing ? (
+    <Divider sx={{ borderColor: 'divider', my: 0.5 }} />
+
+    {/* Content */}
+    {editing ? (
+      <Box sx={{ mt: 1 }}>
         <TextField
           multiline
           value={text}
           onChange={(e) => setText(e.target.value)}
           minRows={2}
+          fullWidth
+          size="small"
         />
-      ) : (
-        <Typography variant="body1">{comment.content}</Typography>
-      )}
+      </Box>
+    ) : (
+      <Typography 
+        variant="body1" 
+        sx={{ 
+          lineHeight: 1.6, 
+          color: 'text.primary',
+          mb: 1.5 
+        }}
+      >
+        {comment.content}
+      </Typography>
+    )}
 
-      {error && <Alert severity="error">{error}</Alert>}
+    {/* Error */}
+    {error && (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        {error}
+      </Alert>
+    )}
 
-      {canEdit && (
-        <Stack direction="row" spacing={1}>
-          {editing ? (
-            <>
-              <Button
-                size="small"
-                onClick={handleSave}
-                disabled={loading}
-              >
-                Save
-              </Button>
-              <Button
-                size="small"
-                onClick={() => {
-                  setEditing(false)
-                  setText(comment.content)
-                }}
-              >
-                Cancel
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button size="small" onClick={() => setEditing(true)}>
-                Edit
-              </Button>
-              <Button
-                size="small"
-                color="error"
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                Delete
-              </Button>
-            </>
-          )}
-        </Stack>
-      )}
-    </Stack>
+    {/* Actions */}
+    {canEdit && (
+      <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end', pt: 1 }}>
+        {editing ? (
+          <>
+            <Button
+              size="small"
+              onClick={handleSave}
+              disabled={loading}
+              variant="outlined"
+            >
+              Save
+            </Button>
+            <Button
+              size="small"
+              onClick={() => {
+                setEditing(false)
+                setText(comment.content)
+              }}
+              variant="outlined"
+            >
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button 
+              size="small" 
+              onClick={() => setEditing(true)}
+              variant="outlined"
+            >
+              Edit
+            </Button>
+            <Button
+              size="small"
+              color="error"
+              onClick={handleDelete}
+              disabled={loading}
+              variant="outlined"
+            >
+              Delete
+            </Button>
+          </>
+        )}
+      </Stack>
+    )}
+  </Stack>
+</Paper>
+
   )
 }
 

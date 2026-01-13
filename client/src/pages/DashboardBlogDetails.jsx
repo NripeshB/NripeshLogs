@@ -116,7 +116,7 @@ if (error) {
           variant="contained"
           onClick={() =>
             navigate(
-              `/dashboard/articles/new?blogId=${blogId}`
+              `/dashboard/articles/new`
             )
           }
         >
