@@ -1,5 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { signupUser, clearAuthError } from '../features/auth/authSlice'
+import {
+  signupUser,
+  clearAuthError,
+} from '../features/auth/authSlice'
 import { Button, TextField, Stack, Typography, Alert } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +11,10 @@ const Signup = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { error, status, token } = useSelector((state) => state.auth)
+  const { error, status, signupSuccess } = useSelector(
+    (state) => state.auth
+  )
+
   const [formError, setFormError] = useState(null)
 
   useEffect(() => {
@@ -16,10 +22,14 @@ const Signup = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (token) {
-      navigate('/dashboard')
+    if (signupSuccess) {
+      const timer = setTimeout(() => {
+        navigate('/login')
+      }, 1500)
+
+      return () => clearTimeout(timer)
     }
-  }, [token, navigate])
+  }, [signupSuccess, navigate])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -48,16 +58,29 @@ const Signup = () => {
         {formError && <Alert severity="error">{formError}</Alert>}
         {error && <Alert severity="error">{error}</Alert>}
 
+        {signupSuccess && (
+          <Alert severity="success">
+            Account created successfully. Redirecting to login…
+          </Alert>
+        )}
+
         <TextField name="username" label="Username" required />
         <TextField name="email" label="Email" required />
-        <TextField name="password" label="Password" type="password" required />
+        <TextField
+          name="password"
+          label="Password"
+          type="password"
+          required
+        />
 
         <Button
           type="submit"
           variant="contained"
-          disabled={status === 'loading'}
+          disabled={status === 'loading' || signupSuccess}
         >
-          {status === 'loading' ? 'Creating account…' : 'Create Account'}
+          {status === 'loading'
+            ? 'Creating account…'
+            : 'Create Account'}
         </Button>
       </Stack>
     </form>

@@ -26,7 +26,6 @@ export const signupUser = createAsyncThunk(
 )
 
 export const fetchMe = createAsyncThunk('auth/me', authApi.getMe)
-
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -35,20 +34,26 @@ const authSlice = createSlice({
     status: 'idle',
     error: null,
     hydrated: false,
+    signupSuccess: false,
   },
   reducers: {
     logout(state) {
       state.user = null
       state.token = null
       state.error = null
+      state.signupSuccess = false
       localStorage.removeItem('token')
     },
     clearAuthError(state) {
       state.error = null
     },
+    clearSignupSuccess(state) {
+      state.signupSuccess = false
+    },
   },
   extraReducers: (builder) => {
     builder
+      // LOGIN
       .addCase(loginUser.pending, (state) => {
         state.status = 'loading'
         state.error = null
@@ -63,20 +68,23 @@ const authSlice = createSlice({
         state.status = 'failed'
         state.error = action.payload
       })
+
+      // SIGNUP
       .addCase(signupUser.pending, (state) => {
         state.status = 'loading'
         state.error = null
+        state.signupSuccess = false
       })
-      .addCase(signupUser.fulfilled, (state, action) => {
+      .addCase(signupUser.fulfilled, (state) => {
         state.status = 'succeeded'
-        state.token = action.payload.token
-        state.user = action.payload.user
-        localStorage.setItem('token', action.payload.token)
+        state.signupSuccess = true
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.payload
       })
+
+      // ME
       .addCase(fetchMe.fulfilled, (state, action) => {
         state.user = action.payload
         state.hydrated = true
@@ -89,6 +97,7 @@ const authSlice = createSlice({
       })
   },
 })
+
 
 export const { logout, clearAuthError } = authSlice.actions
 export default authSlice.reducer

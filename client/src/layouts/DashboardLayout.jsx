@@ -54,20 +54,20 @@ const DashboardLayout = () => {
           <ListItemButton  component={Link} to="/dashboard">
             <ListItemText primary="Overview" />
           </ListItemButton>
-
+          {!isAdmin(user) && (
           <ListItemButton  component={Link} to="/dashboard/blogs">
             <ListItemText primary="My Blogs" />
-          </ListItemButton>
-
+          </ListItemButton>)}
+             {!isAdmin(user) && (
           <ListItemButton component={Link} to="/dashboard/blogs/new">
             <ListItemText primary="New Blog" />
-          </ListItemButton>
+          </ListItemButton>)}
 
-
+          {!isAdmin(user) && (
           <ListItemButton  component={Link} to="/dashboard/articles/new">
             <ListItemText primary="New Article" />
           </ListItemButton>
-
+          )}
           {isAdmin(user) && (
             <ListItemButton component={Link} to="/admin/users">
               <ListItemText primary="Admin Panel" />

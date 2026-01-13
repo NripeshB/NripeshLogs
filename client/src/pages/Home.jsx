@@ -1,5 +1,3 @@
-
-
 import {
   Stack,
   Typography,
@@ -23,13 +21,13 @@ const Home = () => {
         </Typography>
 
         <Typography variant="h6" color="text.secondary">
-          Full-Stack Developer • MERN • Computer Science Student
+          Full-Stack Developer • MERN
         </Typography>
 
-        <Typography maxWidth={700}>
-          I build full-stack web applications with clean architecture,
-          role-based access control, and production-ready APIs.
-          This platform is one of my major projects.
+        <Typography maxWidth={720} color="text.secondary">
+          I build and deploy full-stack web applications with an emphasis on
+          backend architecture, authentication systems, and clean API design.
+          This platform is both my personal portfolio and a multi-user blogging system.
         </Typography>
 
         <Stack direction="row" spacing={2} flexWrap="wrap">
@@ -38,23 +36,31 @@ const Home = () => {
             component={Link}
             to="/blogs"
           >
-            Read My Blogs
+            Read Blogs
           </Button>
 
-          <Button
+          {/* <Button
             variant="outlined"
             component={Link}
             to="/authors"
           >
-            Explore Authors
+            Authors
+          </Button> */}
+
+          <Button
+            variant="outlined"
+            href="/NripeshCV.pdf"
+            target="_blank"
+          >
+            View CV
           </Button>
 
           <Button
             variant="outlined"
-            href="/Nripesh_Bhusal_CV.pdf"
+            href="/certificate-fullstack.png"
             target="_blank"
           >
-            Download CV
+            FSO Certificate
           </Button>
 
           <Button
@@ -64,37 +70,54 @@ const Home = () => {
           >
             GitHub
           </Button>
+
+          <Button
+            variant="text"
+            href="https://mail.google.com/mail/u/nripesh.bhusal@gmail.com"
+            target="_blank"
+          >
+            Email me
+          </Button>
         </Stack>
       </Stack>
 
       <Divider />
 
-      {/* ABOUT ME */}
+      {/* ABOUT */}
       <Stack spacing={2}>
-        <Typography variant="h5">About Me</Typography>
-        <Typography color="text.secondary" maxWidth={800}>
-          I am a computer science student passionate about backend systems,
-          authentication flows, and building real-world applications.
-          I enjoy working with Node.js, Express, MongoDB, and React,
-          focusing on correctness, scalability, and maintainability.
+        <Typography variant="h5">About</Typography>
+
+        <Typography color="text.secondary" maxWidth={820}>
+          I am a computer science undergraduate with a strong interest in backend
+          development and system design. My work focuses on Node.js-based services,
+          authentication and authorization flows, and building maintainable,
+          production-style applications using the MERN stack.
+        </Typography>
+
+        <Typography color="text.secondary" maxWidth={820}>
+          I have completed the <strong>Full Stack Open</strong> curriculum up to Part 7,
+          gaining hands-on experience with modern React, state management,
+          backend APIs, and deployment workflows.
         </Typography>
       </Stack>
 
       <Divider />
 
-      {/* PROJECTS */}
+      {/* PROJECT */}
       <Stack spacing={2}>
-        <Typography variant="h5">Projects</Typography>
+        <Typography variant="h5">Featured Projects</Typography>
 
         <Card variant="outlined">
           <CardContent>
             <Typography variant="h6">
-              Multi-User Blogging Platform
+              Multi-User Blogging Platform & Portfolio
             </Typography>
 
             <Typography color="text.secondary" sx={{ mb: 2 }}>
-              A full-stack MERN application with authentication,
-              author dashboards, admin governance, and content moderation.
+              A full-stack MERN application featuring JWT-based authentication,
+              role-based access control (Admin, Author, User), content publishing,
+              and moderation workflows. The application also serves as my personal
+              portfolio homepage.
             </Typography>
 
             <Stack direction="row" spacing={1} flexWrap="wrap">
@@ -106,6 +129,8 @@ const Home = () => {
                 'Express',
                 'MongoDB',
                 'JWT',
+                'REST APIs',
+                'Jest',
               ].map((tech) => (
                 <Chip key={tech} label={tech} size="small" />
               ))}
@@ -115,9 +140,9 @@ const Home = () => {
               <Button
                 size="small"
                 component={Link}
-                to="/blogs"
+                to="/authors/nripesh"
               >
-                View Blogs
+                Explore My Blogs
               </Button>
             </Box>
           </CardContent>
@@ -127,43 +152,53 @@ const Home = () => {
       <Divider />
 
       {/* SKILLS */}
-      <Stack spacing={2}>
-        <Typography variant="h5">Skills</Typography>
+      <Stack spacing={1}>
+      <CardContent>
+            <Typography variant="h6">
+              Skills: 
+            </Typography>
 
-        <Stack direction="row" spacing={1} flexWrap="wrap">
-          {[
-            'JavaScript',
-            'TypeScript (basic)',
-            'React',
-            'Redux Toolkit',
-            'Node.js',
-            'Express',
-            'MongoDB',
-            'REST APIs',
-            'JWT Auth',
-            'Git',
-          ].map((skill) => (
-            <Chip key={skill} label={skill} />
-          ))}
-        </Stack>
+            
+            
+      <Stack spacing={1}
+        direction="row"
+        flexWrap="wrap"
+        gap={1.2}
+      >
+        {[
+          'JavaScript',
+          'React',
+          'Redux Toolkit',
+          'Node.js',
+          'Express',
+          'MongoDB',
+          'REST API Design',
+          'JWT Authentication',
+          'Jest',
+          'Git',
+          'Deployment (Vercel, Render)',
+        ].map((skill) => (
+          <Chip key={skill} label={skill} />
+        ))}
       </Stack>
-
+      </CardContent>
+      </Stack>
       <Divider />
 
-      {/* FOOTER CTA */}
+      {/* CTA */}
       <Stack spacing={1}>
         <Typography variant="h6">
-          Interested in my work?
+          Get in touch
         </Typography>
 
         <Typography color="text.secondary">
-          You can explore my blogs, check my code on GitHub,
-          or reach out for internships and collaborations.
+          You can read my blogs, review my projects, or explore my code on GitHub.
+          I am open to internships, backend-focused roles, and collaborative projects.
         </Typography>
       </Stack>
+
     </Stack>
   )
 }
 
 export default Home
-
