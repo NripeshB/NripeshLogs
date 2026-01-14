@@ -12,7 +12,7 @@ const config = require('./utils/config.js')
 const app = express()
 // allowing cross origin access (giving access to the client )
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://nripesh-logs.vercel.app/',
     credentials: true
 }))
 app.use(express.json())
