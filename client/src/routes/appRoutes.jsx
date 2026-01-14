@@ -8,9 +8,9 @@ import Blogs from '../pages/Blogs'
 import BlogDetail from '../pages/BlogDetails'
 import ArticleDetail from '../pages/ArticlesDetails'
 
-import RequireAuth from '../features/auth/RequireAuth'
+import RequireAuth from '../features/auth/requireAuth'
 import RequireAuthor from '../features/auth/requireAuthor'
-import RequireAdmin from '../features/auth/RequireAdmin'
+import RequireAdmin from '../features/auth/requireAdmin'
 
 import DashboardLayout from '../layouts/DashboardLayout'
 import DashboardHome from '../pages/DashboardHome'
