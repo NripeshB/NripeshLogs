@@ -77,7 +77,7 @@ const Home = () => {
 
           <Button
             variant="text"
-            href="https://mail.google.com/mail/u/nripesh.bhusal@gmail.com"
+            href="https://mail.google.com/mail/u/0/#inbox?compose=jrjtXJSwpQrkZWjSnZkzBtSchZcfLPMRpHZxwsbzXKhHXmcxFvVphMxqBsTMRVMsTvTkfdnF"
             target="_blank"
             fullWidth
           >
