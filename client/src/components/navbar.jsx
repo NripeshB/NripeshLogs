@@ -1,4 +1,13 @@
-import { AppBar, Toolbar, Button, Stack, Box, IconButton, Menu, MenuItem} from '@mui/material'
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Stack,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+} from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../features/auth/authSlice'
@@ -6,9 +15,8 @@ import { isAuthor } from '../utils/permission'
 import { useState } from 'react'
 import MenuIcon from '@mui/icons-material/Menu'
 
-
 const Navbar = () => {
-   const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
   const handleMenuOpen = (event) => {
@@ -18,6 +26,7 @@ const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null)
   }
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { token, user } = useSelector((state) => state.auth)
@@ -27,52 +36,112 @@ const Navbar = () => {
     navigate('/login')
   }
 
-    return (
-    <AppBar position="static">
-      <Toolbar>
+  return (
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{
+        backdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(18, 18, 18, 0.8)',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
+      }}
+    >
+      <Toolbar sx={{ minHeight: 72 }}>
         {/* Desktop Navigation */}
         <Stack
           direction="row"
-          spacing={2}
+          spacing={1}
           sx={{
             flexGrow: 1,
             display: { xs: 'none', md: 'flex' },
           }}
         >
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/blogs">
-            Blogs
-          </Button>
-          <Button color="inherit" component={Link} to="/authors">
-            Authors
-          </Button>
+          {['/', '/blogs', '/authors'].map((path, idx) => (
+            <Button
+              key={path}
+              component={Link}
+              to={path}
+              sx={{
+                color: 'white',
+                px: 2,
+                borderRadius: 2,
+                textTransform: 'none',
+                fontWeight: 500,
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.08)',
+                },
+              }}
+            >
+              {['Home', 'Blogs', 'Authors'][idx]}
+            </Button>
+          ))}
         </Stack>
 
         {/* Desktop Auth Buttons */}
         <Stack
           direction="row"
-          spacing={1}
+          spacing={1.5}
           sx={{ display: { xs: 'none', md: 'flex' } }}
         >
           {!token ? (
             <>
-              <Button color="inherit" component={Link} to="/login">
+              <Button
+                component={Link}
+                to="/login"
+                sx={{
+                  color: 'white',
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  px: 2.5,
+                }}
+              >
                 Login
               </Button>
-              <Button color="inherit" component={Link} to="/signup">
+
+              <Button
+                component={Link}
+                to="/signup"
+                variant="contained"
+                sx={{
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  px: 3,
+                  fontWeight: 600,
+                }}
+              >
                 Signup
               </Button>
             </>
           ) : (
             <>
               {isAuthor(user) && (
-                <Button color="inherit" component={Link} to="/dashboard">
+                <Button
+                  component={Link}
+                  to="/dashboard"
+                  variant="contained"
+                  sx={{
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    px: 3,
+                    fontWeight: 600,
+                  }}
+                >
                   Dashboard
                 </Button>
               )}
-              <Button color="inherit" onClick={handleLogout}>
+
+              <Button
+                onClick={handleLogout}
+                sx={{
+                  color: 'white',
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  px: 2.5,
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.08)',
+                  },
+                }}
+              >
                 Logout
               </Button>
             </>
@@ -81,83 +150,86 @@ const Navbar = () => {
 
         {/* Mobile Hamburger */}
         <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-          <IconButton color="inherit" onClick={handleMenuOpen}>
+          <IconButton
+            onClick={handleMenuOpen}
+            sx={{
+              color: 'white',
+              borderRadius: 2,
+            }}
+          >
             <MenuIcon />
           </IconButton>
         </Box>
 
         {/* Mobile Menu */}
         <Menu
-  anchorEl={anchorEl}
-  open={open}
-  onClose={handleMenuClose}
-  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
->
-  {[
-    <MenuItem key="home" component={Link} to="/" onClick={handleMenuClose}>
-      Home
-    </MenuItem>,
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleMenuClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          PaperProps={{
+            sx: {
+              mt: 1,
+              borderRadius: 3,
+              minWidth: 200,
+              backgroundColor: 'rgba(30,30,30,0.95)',
+              backdropFilter: 'blur(8px)',
+            },
+          }}
+        >
+          {[
+            { label: 'Home', to: '/' },
+            { label: 'Blogs', to: '/blogs' },
+            { label: 'Authors', to: '/authors' },
+          ].map((item) => (
+            <MenuItem
+              key={item.to}
+              component={Link}
+              to={item.to}
+              onClick={handleMenuClose}
+              sx={{ py: 1.2 }}
+            >
+              {item.label}
+            </MenuItem>
+          ))}
 
-    <MenuItem key="blogs" component={Link} to="/blogs" onClick={handleMenuClose}>
-      Blogs
-    </MenuItem>,
+          {!token && (
+            <MenuItem component={Link} to="/login" onClick={handleMenuClose}>
+              Login
+            </MenuItem>
+          )}
 
-    <MenuItem key="authors" component={Link} to="/authors" onClick={handleMenuClose}>
-      Authors
-    </MenuItem>,
+          {!token && (
+            <MenuItem component={Link} to="/signup" onClick={handleMenuClose}>
+              Signup
+            </MenuItem>
+          )}
 
-    !token && (
-      <MenuItem
-        key="login"
-        component={Link}
-        to="/login"
-        onClick={handleMenuClose}
-      >
-        Login
-      </MenuItem>
-    ),
+          {token && isAuthor(user) && (
+            <MenuItem
+              component={Link}
+              to="/dashboard"
+              onClick={handleMenuClose}
+            >
+              Dashboard
+            </MenuItem>
+          )}
 
-    !token && (
-      <MenuItem
-        key="signup"
-        component={Link}
-        to="/signup"
-        onClick={handleMenuClose}
-      >
-        Signup
-      </MenuItem>
-    ),
-
-    token && isAuthor(user) && (
-      <MenuItem
-        key="dashboard"
-        component={Link}
-        to="/dashboard"
-        onClick={handleMenuClose}
-      >
-        Dashboard
-      </MenuItem>
-    ),
-
-    token && (
-      <MenuItem
-        key="logout"
-        onClick={() => {
-          handleLogout()
-          handleMenuClose()
-        }}
-      >
-        Logout
-      </MenuItem>
-    ),
-  ].filter(Boolean)}
-</Menu>
-
+          {token && (
+            <MenuItem
+              onClick={() => {
+                handleLogout()
+                handleMenuClose()
+              }}
+            >
+              Logout
+            </MenuItem>
+          )}
+        </Menu>
       </Toolbar>
     </AppBar>
   )
-
 }
 
 export default Navbar

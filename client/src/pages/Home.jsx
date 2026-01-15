@@ -7,205 +7,245 @@ import {
   CardContent,
   Chip,
   Box,
+  Container,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
-    <Stack spacing={6} maxWidth={1000} mx="auto" py={4}>
+    <Container maxWidth="lg">
+      <Stack spacing={8} py={{ xs: 6, md: 10 }}>
 
-      {/* HERO */}
-      <Stack spacing={2}>
-        <Typography variant="h3" fontWeight={600}>
-          Nripesh Bhusal
-        </Typography>
+        {/* HERO */}
+        <Stack spacing={3} alignItems="flex-start">
+          <Box>
+            <Typography
+              variant="h2"
+              fontWeight={800}
+              sx={{
+                lineHeight: 1.1,
+                background:
+                  'linear-gradient(90deg, #ffffff, #90caf9)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Nripesh Bhusal
+            </Typography>
 
-        <Typography variant="h6" color="text.secondary">
-          Full-Stack Developer • MERN
-        </Typography>
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              sx={{ mt: 1 }}
+            >
+              Full-Stack Developer • MERN
+            </Typography>
+          </Box>
 
-        <Typography maxWidth={720} color="text.secondary">
-          I build and deploy full-stack web applications with an emphasis on
-          backend architecture, authentication systems, and clean API design.
-          This platform is both my personal portfolio and a multi-user blogging system.
-        </Typography>
-
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={2}
-          gap={1.2}
-          alignItems={{ xs: 'stretch', sm: 'center' }}
-          sx={{
-            width: '100%',
-          }}
-        >
-          <Button
-            variant="contained"
-            component={Link}
-            to="/blogs"
-            fullWidth
+          <Typography
+            maxWidth={720}
+            color="text.secondary"
+            fontSize="1.05rem"
           >
-            Read Blogs
-          </Button>
+            I design and build production-style full-stack web applications with a
+            strong focus on backend architecture, authentication systems, and clean,
+            scalable API design. This platform doubles as my portfolio and a
+            multi-user blogging system.
+          </Typography>
 
-          <Button
-            variant="outlined"
-            href="/NripeshCV.pdf"
-            target="_blank"
-            fullWidth
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            width="100%"
+            maxWidth={720}
           >
-            View CV
-          </Button>
+            <Button
+              variant="contained"
+              size="large"
+              component={Link}
+              to="/blogs"
+              sx={{
+                px: 4,
+                py: 1.3,
+                fontWeight: 600,
+                borderRadius: 3,
+              }}
+            >
+              Read Blogs
+            </Button>
 
-          <Button
-            variant="outlined"
-            href="/certificate-fullstack.png"
-            target="_blank"
-            fullWidth
-          >
-            FSO Certificate
-          </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              href="/NripeshCV.pdf"
+              target="_blank"
+              sx={{ borderRadius: 3 }}
+            >
+              View CV
+            </Button>
 
-          <Button
-            variant="text"
-            href="https://github.com/NripeshB"
-            target="_blank"
-            fullWidth
-          >
-            GitHub
-          </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              href="/certificate-fullstack.png"
+              target="_blank"
+              sx={{ borderRadius: 3 }}
+            >
+              FSO Certificate
+            </Button>
+          </Stack>
 
-          <Button
-            variant="text"
-            href="https://mail.google.com/mail/u/0/#inbox?compose=jrjtXJSwpQrkZWjSnZkzBtSchZcfLPMRpHZxwsbzXKhHXmcxFvVphMxqBsTMRVMsTvTkfdnF"
-            target="_blank"
-            fullWidth
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant="text"
+              href="https://github.com/NripeshB"
+              target="_blank"
+            >
+              GitHub
+            </Button>
+
+            <Button
+              variant="text"
+              href="https://mail.google.com/mail/u/0/#inbox?compose=jrjtXJSwpQrkZWjSnZkzBtSchZcfLPMRpHZxwsbzXKhHXmcxFvVphMxqBsTMRVMsTvTkfdnF"
+              target="_blank"
+            >
+              Email me
+            </Button>
+          </Stack>
+        </Stack>
+
+        <Divider />
+
+        {/* ABOUT */}
+        <Stack spacing={2} maxWidth={900}>
+          <Typography variant="h5" fontWeight={700}>
+            About
+          </Typography>
+
+          <Typography color="text.secondary">
+            I am a computer science undergraduate with a strong inclination toward
+            backend development and system design. I primarily work with Node.js-based
+            services, authentication and authorization flows, and production-ready
+            MERN applications.
+          </Typography>
+
+          <Typography color="text.secondary">
+            I have completed the <strong>Full Stack Open</strong> curriculum up to
+            Part 7, gaining hands-on experience with modern React, state management,
+            backend APIs, testing, and deployment workflows.
+          </Typography>
+        </Stack>
+
+        <Divider />
+
+        {/* PROJECT */}
+        <Stack spacing={3}>
+          <Typography variant="h5" fontWeight={700}>
+            Featured Project
+          </Typography>
+
+          <Card
+            sx={{
+              borderRadius: 4,
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
+            }}
           >
-            Email me
-          </Button>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+              <Typography variant="h6" fontWeight={600}>
+                Multi-User Blogging Platform & Portfolio
+              </Typography>
+
+              <Typography color="text.secondary" sx={{ mt: 1, mb: 3 }}>
+                A full-stack MERN application featuring JWT-based authentication,
+                role-based access control (Admin, Author, User), content publishing,
+                moderation workflows, and a personal portfolio interface.
+              </Typography>
+
+              <Stack
+                direction="row"
+                flexWrap="wrap"
+                gap={1.2}
+              >
+                {[
+                  'React',
+                  'Redux Toolkit',
+                  'Material UI',
+                  'Node.js',
+                  'Express',
+                  'MongoDB',
+                  'JWT',
+                  'REST APIs',
+                  'Jest',
+                ].map((tech) => (
+                  <Chip key={tech} label={tech} size="small" />
+                ))}
+              </Stack>
+
+              <Box mt={3}>
+                <Button
+                  size="small"
+                  component={Link}
+                  to="/authors/nripesh"
+                >
+                  Explore My Blogs →
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Stack>
+
+        <Divider />
+
+        {/* SKILLS */}
+        <Stack spacing={2}>
+          <Typography variant="h5" fontWeight={700}>
+            Skills
+          </Typography>
+
+          <Stack
+            direction="row"
+            flexWrap="wrap"
+            gap={1.2}
+          >
+            {[
+              'JavaScript',
+              'React',
+              'Redux Toolkit',
+              'Node.js',
+              'Express',
+              'MongoDB',
+              'REST API Design',
+              'JWT Authentication',
+              'Jest',
+              'Git',
+              'Deployment (Vercel, Render)',
+            ].map((skill) => (
+              <Chip
+                key={skill}
+                label={skill}
+                sx={{ fontWeight: 500 }}
+              />
+            ))}
+          </Stack>
+        </Stack>
+
+        <Divider />
+
+        {/* CTA */}
+        <Stack spacing={2} maxWidth={720}>
+          <Typography variant="h5" fontWeight={700}>
+            Let’s connect
+          </Typography>
+
+          <Typography color="text.secondary">
+            You can read my blogs, review my projects, or explore my code on GitHub.
+            I am open to internships, backend-focused roles, and collaborative work.
+          </Typography>
         </Stack>
 
       </Stack>
-
-      <Divider />
-
-      {/* ABOUT */}
-      <Stack spacing={2}>
-        <Typography variant="h5">About</Typography>
-
-        <Typography color="text.secondary" maxWidth={820}>
-          I am a computer science undergraduate with a strong interest in backend
-          development and system design. My work focuses on Node.js-based services,
-          authentication and authorization flows, and building maintainable,
-          production-style applications using the MERN stack.
-        </Typography>
-
-        <Typography color="text.secondary" maxWidth={820}>
-          I have completed the <strong>Full Stack Open</strong> curriculum up to Part 7,
-          gaining hands-on experience with modern React, state management,
-          backend APIs, and deployment workflows.
-        </Typography>
-      </Stack>
-
-      <Divider />
-
-      {/* PROJECT */}
-      <Stack spacing={2}>
-        <Typography variant="h5">Featured Projects</Typography>
-
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h6">
-              Multi-User Blogging Platform & Portfolio
-            </Typography>
-
-            <Typography color="text.secondary" sx={{ mb: 2 }}>
-              A full-stack MERN application featuring JWT-based authentication,
-              role-based access control (Admin, Author, User), content publishing,
-              and moderation workflows. The application also serves as my personal
-              portfolio homepage.
-            </Typography>
-
-            <Stack direction="row"
-        flexWrap="wrap"
-        gap={1.2}>
-              {[
-                'React',
-                'Redux Toolkit',
-                'Material UI',
-                'Node.js',
-                'Express',
-                'MongoDB',
-                'JWT',
-                'REST APIs',
-                'Jest',
-              ].map((tech) => (
-                <Chip key={tech} label={tech} size="small" />
-              ))}
-            </Stack>
-
-            <Box mt={2}>
-              <Button
-                size="small"
-                component={Link}
-                to="/authors/nripesh"
-              >
-                Explore My Blogs
-              </Button>
-            </Box>
-          </CardContent>
-        </Card>
-      </Stack>
-
-      <Divider />
-
-      {/* SKILLS */}
-      <Stack spacing={1}>
-      <CardContent>
-            <Typography variant="h6">
-              Skills: 
-            </Typography>
-
-            
-            
-      <Stack spacing={1}
-        direction="row"
-        flexWrap="wrap"
-        gap={1.2}
-      >
-        {[
-          'JavaScript',
-          'React',
-          'Redux Toolkit',
-          'Node.js',
-          'Express',
-          'MongoDB',
-          'REST API Design',
-          'JWT Authentication',
-          'Jest',
-          'Git',
-          'Deployment (Vercel, Render)',
-        ].map((skill) => (
-          <Chip key={skill} label={skill} />
-        ))}
-      </Stack>
-      </CardContent>
-      </Stack>
-      <Divider />
-
-      {/* CTA */}
-      <Stack spacing={1}>
-        <Typography variant="h6">
-          Get in touch
-        </Typography>
-
-        <Typography color="text.secondary">
-          You can read my blogs, review my projects, or explore my code on GitHub.
-          I am open to internships, backend-focused roles, and collaborative projects.
-        </Typography>
-      </Stack>
-
-    </Stack>
+    </Container>
   )
 }
 
