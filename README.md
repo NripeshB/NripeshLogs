@@ -1,3 +1,5 @@
+### The Deployed Site: https://nripesh-logs.vercel.app/
+
 # Blog & Portfolio Platform
 
 A full-stack MERN application that combines a personal portfolio with a structured blogging platform.
